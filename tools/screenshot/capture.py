@@ -51,13 +51,21 @@ POLL_INTERVAL_SECONDS = 0.5
 LOCAL_URL_PREFIXES = ("http://127.0.0.1:", "http://localhost:")
 
 
+def require_local(url: str) -> None:
+    """!
+    @brief Refuse any address that is not on this machine.
+    @param url Address to check.
+    """
+    if not url.startswith(LOCAL_URL_PREFIXES):
+        raise ValueError(f"only local addresses are allowed: {url}")
+
+
 def wait_for(url: str) -> None:
     """!
     @brief Block until the web app answers.
     @param url Address to poll.
     """
-    if not url.startswith(LOCAL_URL_PREFIXES):
-        raise ValueError(f"only local addresses are allowed: {url}")
+    require_local(url)
     pause = threading.Event()
     deadline = time.monotonic() + STARTUP_TIMEOUT_SECONDS
     while time.monotonic() < deadline:
@@ -85,7 +93,12 @@ def run_steps(scenario: dict[str, Any], out_dir: Path) -> None:
         page = browser.new_page(viewport={"width": width, "height": height})
         for step in scenario["steps"]:
             if "goto" in step:
-                page.goto(base + step["goto"])
+                target_url = step["goto"]
+                if not target_url.startswith("/"):
+                    require_local(target_url)
+                    page.goto(target_url)
+                else:
+                    page.goto(base + target_url)
             elif "fill" in step:
                 page.fill(step["fill"][0], step["fill"][1])
             elif "click" in step:

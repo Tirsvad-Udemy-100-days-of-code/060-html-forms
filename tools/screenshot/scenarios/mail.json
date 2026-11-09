@@ -1,0 +1,20 @@
+{
+  "services": ["python /tools/smtp_sink.py 1025 8025"],
+  "server": "env MAIL_HOST=127.0.0.1 MAIL_PORT=1025 MAIL_USE_TLS=false MAIL_RECIPIENT=owner@example.com python -m html_forms.presentation.features.blog.app",
+  "base_url": "http://127.0.0.1:5001",
+  "viewport": [1100, 800],
+  "steps": [
+    {"goto": "http://127.0.0.1:8025/"},
+    {"screenshot": "l9-inbox-before.png"},
+    {"goto": "/contact"},
+    {"fill": ["input[name=name]", "Angela"]},
+    {"fill": ["input[name=email]", "angela@example.com"]},
+    {"fill": ["input[name=phone]", "123456789"]},
+    {"fill": ["textarea[name=message]", "Hello from the contact form"]},
+    {"screenshot": "l9-contact-filled.png", "full_page": true},
+    {"click": "form button[type=submit]"},
+    {"screenshot": "l9-contact-sent.png", "full_page": true},
+    {"goto": "http://127.0.0.1:8025/"},
+    {"screenshot": "l9-inbox-after.png"}
+  ]
+}
