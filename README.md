@@ -61,7 +61,26 @@ To leave the environment, run `deactivate`.
 
 ## ▶️ Run
 
-The commands below are added to this README as each milestone lands. Until then, the package imports and the tests run.
+With the virtual environment active, start the login form demo (lecture steps L1 to L4):
+
+```bash
+python -m html_forms.presentation.features.login.app
+```
+
+Open <http://127.0.0.1:5000/>. More apps are added here as each milestone lands.
+
+### Lecture steps
+
+Screenshots are captured in a Docker container (`bash tools/screenshot/run.sh demo`), never on your desktop.
+
+| Step | What it shows | Screenshot |
+| --- | --- | --- |
+| L1 | Flask serves `index.html` with an `<h1>` | ![L1 index page][L1] |
+| L2 | The hand-written login form | ![L2 login form][L2] |
+| L3 | The form with `action` and `method="post"` filled in, ready to submit | ![L3 filled form][L3] |
+| L4 | `receive_data` returns the name and password as an `<h1>` | ![L4 result][L4] |
+
+The login demo echoes the password because the lecture does; never do that in a real application.
 
 ## 🧪 Tests
 
@@ -120,6 +139,10 @@ The documents a newcomer needs, in reading order.
 [repository]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/060-html-forms
 [documentation]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/060-html-forms/wiki
 [issues]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/060-html-forms/issues
+[L1]: ./docs/images/l1-serve-index.png
+[L2]: ./docs/images/l2-login-form.png
+[L3]: ./docs/images/l3-form-post.png
+[L4]: ./docs/images/l4-receive-data.png
 [agents]: ./AGENTS.md
 [BC-001]: ./docs/business-case.md
 [SA-001]: ./docs/stakeholder-analysis.md

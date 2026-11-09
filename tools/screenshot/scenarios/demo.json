@@ -1,0 +1,15 @@
+{
+  "server": "python -m html_forms.presentation.features.login.app",
+  "base_url": "http://127.0.0.1:5000",
+  "viewport": [900, 600],
+  "steps": [
+    {"goto": "/"},
+    {"screenshot": "l1-serve-index.png"},
+    {"screenshot": "l2-login-form.png", "selector": "form"},
+    {"fill": ["input[name=name]", "Angela"]},
+    {"fill": ["input[name=password]", "secret-demo"]},
+    {"screenshot": "l3-form-post.png"},
+    {"click": "input[type=submit]"},
+    {"screenshot": "l4-receive-data.png"}
+  ]
+}
