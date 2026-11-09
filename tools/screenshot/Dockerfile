@@ -8,4 +8,5 @@ COPY src ./src
 RUN python -m pip install --no-cache-dir .
 
 COPY tools/screenshot /tools
+USER pwuser
 ENTRYPOINT ["python", "/tools/capture.py"]

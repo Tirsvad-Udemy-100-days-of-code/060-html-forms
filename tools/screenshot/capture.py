@@ -20,8 +20,10 @@ Usage (inside the container): python capture.py scenario.json output_dir
 """
 
 import json
+import shlex
 import subprocess
 import sys
+import threading
 import time
 import urllib.error
 import urllib.request
@@ -31,6 +33,8 @@ from typing import Any
 from playwright.sync_api import sync_playwright
 
 STARTUP_TIMEOUT_SECONDS = 30
+POLL_INTERVAL_SECONDS = 0.5
+LOCAL_URL_PREFIXES = ("http://127.0.0.1:", "http://localhost:")
 
 
 def wait_for(url: str) -> None:
@@ -38,15 +42,19 @@ def wait_for(url: str) -> None:
     @brief Block until the web app answers.
     @param url Address to poll.
     """
+    if not url.startswith(LOCAL_URL_PREFIXES):
+        raise ValueError(f"only local addresses are allowed: {url}")
+    pause = threading.Event()
     deadline = time.monotonic() + STARTUP_TIMEOUT_SECONDS
     while time.monotonic() < deadline:
         try:
-            urllib.request.urlopen(url, timeout=2)  # noqa: S310
+            # The address is checked above to be local, and http is the only scheme.
+            urllib.request.urlopen(url, timeout=2)  # nosemgrep
             return
         except urllib.error.HTTPError:
             return
         except OSError:
-            time.sleep(0.5)
+            pause.wait(POLL_INTERVAL_SECONDS)
     raise TimeoutError(f"server did not start: {url}")
 
 
@@ -88,8 +96,9 @@ def main() -> int:
     scenario = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
     out_dir = Path(sys.argv[2])
     out_dir.mkdir(parents=True, exist_ok=True)
+    # The commands come from scenario files of this repository, run without a shell.
     processes = [
-        subprocess.Popen(command, shell=True)  # noqa: S602
+        subprocess.Popen(shlex.split(command))  # nosemgrep
         for command in [*scenario.get("services", []), scenario["server"]]
     ]
     try:
