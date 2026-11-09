@@ -5,6 +5,7 @@
 <p class="subheading">Have questions? I have answers.</p>
 {% endblock %}
 {% block content %}
+{% if error_text %}<p class="form-error" role="alert">{{ error_text }}</p>{% endif %}
 <p>Want to get in touch? Fill out the form below to send me a message and I will get back to you as soon as possible!</p>
 <form class="contact-form" method="post" action="{{ url_for('contact') }}">
   <label for="name">Name</label>

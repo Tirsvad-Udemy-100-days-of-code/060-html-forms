@@ -75,11 +75,43 @@ Start the blog with its contact form (lecture steps L5 to L8) in a second termin
 python -m html_forms.presentation.features.blog.app
 ```
 
-Open <http://127.0.0.1:5001/>. More features are added here as each milestone lands.
+Open <http://127.0.0.1:5001/>.
+
+### Send real email from the contact form
+
+The contact form sends the message to the site owner with `smtplib`. Configure the mail server with environment variables in the shell that starts the blog (the project never reads a `.env` file; do not commit secrets):
+
+| Variable | Meaning | Default |
+| --- | --- | --- |
+| `MAIL_HOST` | SMTP server, for example `smtp.gmail.com` | required |
+| `MAIL_PORT` | SMTP port | `587` |
+| `MAIL_USER` | Login name, also used as the sender address | none (no login) |
+| `MAIL_PASSWORD` | Password or app password | none |
+| `MAIL_RECIPIENT` | Address that receives the messages | required |
+| `MAIL_USE_TLS` | `false` or `0` turns STARTTLS off | `true` |
+
+PowerShell:
+
+```powershell
+$env:MAIL_HOST = "smtp.example.com"
+$env:MAIL_USER = "me@example.com"
+$env:MAIL_PASSWORD = "your-app-password"
+$env:MAIL_RECIPIENT = "me@example.com"
+python -m html_forms.presentation.features.blog.app
+```
+
+bash:
+
+```bash
+export MAIL_HOST=smtp.example.com MAIL_USER=me@example.com MAIL_PASSWORD=your-app-password MAIL_RECIPIENT=me@example.com
+python -m html_forms.presentation.features.blog.app
+```
+
+Without `MAIL_HOST` and `MAIL_RECIPIENT` the form answers "Your message could not be sent" (HTTP 502) instead of pretending to succeed.
 
 ### Lecture steps
 
-Screenshots are captured in a Docker container (`bash tools/screenshot/run.sh demo`), never on your desktop.
+Screenshots are captured in a Docker container (`bash tools/screenshot/run.sh demo`, `blog` or `mail`), never on your desktop.
 
 | Step | What it shows | Screenshot |
 | --- | --- | --- |
@@ -92,6 +124,7 @@ Screenshots are captured in a Docker container (`bash tools/screenshot/run.sh de
 | L6 | `POST /form-entry` receives the form data and returns an `<h1>` | ![L6 form-entry result][L6] |
 | L7 | The contact form filled in; `/contact` now handles GET and POST with `request.method` | ![L7 filled contact form][L7] |
 | L8 | `contact.html` shows "Successfully sent your message" through a Jinja `if` | ![L8 success heading][L8] |
+| L9 | The form sends a real email with `smtplib`; here a local mail sink in Docker received it | ![L9 filled form][L9a] ![L9 sent][L9b] ![L9 inbox][L9c] |
 
 Notes:
 
@@ -165,6 +198,9 @@ The documents a newcomer needs, in reading order.
 [L6]: ./docs/images/l6-form-entry-result.png
 [L7]: ./docs/images/l7-contact-filled.png
 [L8]: ./docs/images/l8-contact-success.png
+[L9a]: ./docs/images/l9-contact-filled.png
+[L9b]: ./docs/images/l9-contact-sent.png
+[L9c]: ./docs/images/l9-inbox-after.png
 [agents]: ./AGENTS.md
 [BC-001]: ./docs/business-case.md
 [SA-001]: ./docs/stakeholder-analysis.md

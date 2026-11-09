@@ -5,11 +5,14 @@
 
 import logging
 import re
+from pathlib import Path
 
 import pytest
 from flask.testing import FlaskClient
 
 from html_forms import constants
+from html_forms.domain.entities.contact_message import ContactMessage
+from html_forms.domain.errors.mail_delivery_error import MailDeliveryError
 from html_forms.presentation.features.blog.app import create_app
 
 FORM_DATA = {
@@ -20,13 +23,45 @@ FORM_DATA = {
 }
 
 
+class FakeMailSender:
+    """!@brief Fake of the MailSender port; fails when told to."""
+
+    def __init__(self, fail: bool = False) -> None:
+        """!
+        @brief Create the fake.
+        @param fail True to raise MailDeliveryError on send.
+        """
+        self.received: list[ContactMessage] = []
+        self._fail = fail
+
+    def send(self, message: ContactMessage) -> None:
+        """!
+        @brief Record the message or fail.
+        @param message The message.
+        @throws MailDeliveryError when created with fail=True.
+        """
+        if self._fail:
+            raise MailDeliveryError("down: " + message.email)
+        self.received.append(message)
+
+
 @pytest.fixture
-def client() -> FlaskClient:
+def sender() -> FakeMailSender:
     """!
-    @brief Test client of a fresh blog app.
+    @brief The fake mail sender of the app under test.
+    @return The fake.
+    """
+    return FakeMailSender()
+
+
+@pytest.fixture
+def client(sender: FakeMailSender) -> FlaskClient:
+    """!
+    @brief Test client of a fresh blog app with a fake mail sender.
+    @param sender The fake mail sender.
     @return The client.
     """
-    return create_app().test_client()
+    return create_app(mail_sender=sender).test_client()
 
 
 @pytest.mark.parametrize(
@@ -121,3 +156,89 @@ def test_submission_does_not_leak_personal_data(
     for value in FORM_DATA.values():
         assert value not in output
     assert "message_length" in caplog.text
+
+
+def test_contact_post_passes_the_four_values_to_the_mail_sender(
+    client: FlaskClient, sender: FakeMailSender
+) -> None:
+    """!@brief The sender receives name, email, phone and message."""
+    client.post(constants.ROUTE_CONTACT, data=FORM_DATA)
+    assert sender.received == [
+        ContactMessage(
+            FORM_DATA[constants.FIELD_NAME],
+            FORM_DATA[constants.FIELD_EMAIL],
+            FORM_DATA[constants.FIELD_PHONE],
+            FORM_DATA[constants.FIELD_MESSAGE],
+        )
+    ]
+
+
+def test_contact_post_returns_502_when_delivery_fails() -> None:
+    """!@brief A failing sender gives 502, an error text and no success heading."""
+    client = create_app(mail_sender=FakeMailSender(fail=True)).test_client()
+    response = client.post(constants.ROUTE_CONTACT, data=FORM_DATA)
+    html = response.get_data(as_text=True)
+    assert response.status_code == constants.HTTP_BAD_GATEWAY
+    assert constants.MAIL_DELIVERY_FAILED_TEXT in html
+    assert constants.MSG_SENT_TEXT not in html
+
+
+def test_contact_post_returns_400_when_email_has_line_break(
+    client: FlaskClient, sender: FakeMailSender
+) -> None:
+    """!@brief CRLF in the email is refused and nothing is sent."""
+    data = {**FORM_DATA, constants.FIELD_EMAIL: "a@x.invalid\r\nBcc: e@x.invalid"}
+    response = client.post(constants.ROUTE_CONTACT, data=data)
+    html = response.get_data(as_text=True)
+    assert response.status_code == constants.HTTP_BAD_REQUEST
+    assert constants.CONTACT_INVALID_TEXT in html
+    assert constants.MSG_SENT_TEXT not in html
+    assert sender.received == []
+
+
+def test_contact_post_returns_400_when_message_is_empty(
+    client: FlaskClient,
+) -> None:
+    """!@brief A blank message is refused."""
+    data = {**FORM_DATA, constants.FIELD_MESSAGE: "   "}
+    response = client.post(constants.ROUTE_CONTACT, data=data)
+    assert response.status_code == constants.HTTP_BAD_REQUEST
+
+
+def test_contact_post_returns_502_when_mail_is_not_configured(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """!@brief Without MAIL_HOST and MAIL_RECIPIENT the default sender fails."""
+    monkeypatch.delenv(constants.ENV_MAIL_HOST, raising=False)
+    monkeypatch.delenv(constants.ENV_MAIL_RECIPIENT, raising=False)
+    response = create_app().test_client().post(constants.ROUTE_CONTACT, data=FORM_DATA)
+    assert response.status_code == constants.HTTP_BAD_GATEWAY
+
+
+def test_delivery_failure_log_has_no_personal_data(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    """!@brief A failed send logs the exception class name only."""
+    client = create_app(mail_sender=FakeMailSender(fail=True)).test_client()
+    with caplog.at_level(logging.DEBUG):
+        client.post(constants.ROUTE_CONTACT, data=FORM_DATA)
+    assert "MailDeliveryError" in caplog.text
+    for value in FORM_DATA.values():
+        assert value not in caplog.text
+
+
+def test_no_source_file_reads_a_dotenv_file() -> None:
+    """!@brief No file under src/ mentions a .env file."""
+    package = Path(__file__).resolve().parents[2] / "src" / "html_forms"
+    source_suffixes = {".py", ".html", ".json", ".css"}
+    pattern = re.compile(r"\.env(?!\w)")
+    offenders = [
+        str(path)
+        for path in package.rglob("*")
+        if path.is_file()
+        and path.suffix in source_suffixes
+        and "__pycache__" not in path.parts
+        and not any(part.endswith(".egg-info") for part in path.parts)
+        and pattern.search(path.read_text(encoding="utf-8", errors="ignore"))
+    ]
+    assert offenders == []
