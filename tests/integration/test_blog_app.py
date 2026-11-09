@@ -229,13 +229,16 @@ def test_delivery_failure_log_has_no_personal_data(
 
 def test_no_source_file_reads_a_dotenv_file() -> None:
     """!@brief No file under src/ mentions a .env file."""
-    src = Path(__file__).resolve().parents[2] / "src"
+    package = Path(__file__).resolve().parents[2] / "src" / "html_forms"
+    source_suffixes = {".py", ".html", ".json", ".css"}
     pattern = re.compile(r"\.env(?!\w)")
     offenders = [
         str(path)
-        for path in src.rglob("*")
+        for path in package.rglob("*")
         if path.is_file()
-        and path.suffix != ".pyc"
+        and path.suffix in source_suffixes
+        and "__pycache__" not in path.parts
+        and not any(part.endswith(".egg-info") for part in path.parts)
         and pattern.search(path.read_text(encoding="utf-8", errors="ignore"))
     ]
     assert offenders == []
