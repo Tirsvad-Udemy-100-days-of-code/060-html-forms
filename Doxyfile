@@ -1,0 +1,23 @@
+# Doxygen configuration for html-forms (Python sources under src/).
+# Generate the API documentation with:  doxygen Doxyfile
+# The result is written to docs/api/html/index.html (git-ignored).
+
+PROJECT_NAME           = "html-forms"
+PROJECT_BRIEF          = "Day 60: HTML forms, Flask POST requests and a contact form that sends email"
+OUTPUT_DIRECTORY       = docs/api
+INPUT                  = src
+FILE_PATTERNS          = *.py
+RECURSIVE              = YES
+EXCLUDE_PATTERNS       = */__pycache__/*
+OPTIMIZE_OUTPUT_JAVA   = YES
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = NO
+JAVADOC_AUTOBRIEF      = YES
+AUTOLINK_SUPPORT       = YES
+MARKDOWN_SUPPORT       = YES
+USE_MDFILE_AS_MAINPAGE = README.md
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+HAVE_DOT               = NO
+QUIET                  = YES
+WARN_IF_UNDOCUMENTED   = YES
