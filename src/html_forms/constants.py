@@ -20,3 +20,21 @@ DEMO_PORT = 5000
 
 ## @brief Port of the blog with the contact form (lecture steps L5 to L9).
 BLOG_PORT = 5001
+
+## @brief Route of the home page, which serves the login form.
+ROUTE_HOME = "/"
+
+## @brief Route the login form posts to.
+ROUTE_LOGIN = "/login"
+
+## @brief Name of the name input of the login form.
+FIELD_NAME = "name"
+
+## @brief Name of the password input of the login form.
+FIELD_PASSWORD = "password"
+
+## @brief Name of the template of the login page.
+TEMPLATE_LOGIN = "index.html"
+
+## @brief Heading text of the login page.
+LOGIN_HEADING = "Login"

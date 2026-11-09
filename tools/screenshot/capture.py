@@ -12,7 +12,7 @@ A scenario is a JSON file:
         {"goto": "/"},
         {"fill": ["input[name=name]", "Angela"]},
         {"click": "input[type=submit]"},
-        {"screenshot": "name.png", "full_page": false}
+        {"screenshot": "name.png", "full_page": false, "selector": "form"}
       ]
     }
 
@@ -78,10 +78,11 @@ def run_steps(scenario: dict[str, Any], out_dir: Path) -> None:
                 page.click(step["click"])
                 page.wait_for_load_state()
             elif "screenshot" in step:
-                page.screenshot(
-                    path=str(out_dir / step["screenshot"]),
-                    full_page=step.get("full_page", False),
-                )
+                target = str(out_dir / step["screenshot"])
+                if "selector" in step:
+                    page.locator(step["selector"]).screenshot(path=target)
+                else:
+                    page.screenshot(path=target, full_page=step.get("full_page", False))
                 print("saved", step["screenshot"])
             else:
                 raise ValueError(f"unknown step: {step}")

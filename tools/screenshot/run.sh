@@ -16,7 +16,7 @@ scenario="tools/screenshot/scenarios/${name}.json"
 }
 
 cd "${root}"
-docker build -q -t html-forms-screenshot -f tools/screenshot/Dockerfile .
+docker build -t html-forms-screenshot -f tools/screenshot/Dockerfile .
 mkdir -p docs/images
 MSYS_NO_PATHCONV=1 docker run --rm \
 	-v "$(pwd -W 2>/dev/null || pwd)/docs/images:/out" \
