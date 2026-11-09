@@ -12,6 +12,7 @@ A scenario is a JSON file:
         {"goto": "/"},
         {"fill": ["input[name=name]", "Angela"]},
         {"click": "input[type=submit]"},
+        {"post": "/form-entry", "data": {"name": "Angela"}},
         {"screenshot": "name.png", "full_page": false, "selector": "form"}
       ]
     }
@@ -33,6 +34,19 @@ from typing import Any
 from playwright.sync_api import sync_playwright
 
 STARTUP_TIMEOUT_SECONDS = 30
+POST_FORM_SCRIPT = """([url, data]) => {
+  const form = document.createElement('form');
+  form.method = 'post';
+  form.action = url;
+  for (const [key, value] of Object.entries(data)) {
+    const input = document.createElement('input');
+    input.name = key;
+    input.value = value;
+    form.appendChild(input);
+  }
+  document.body.appendChild(form);
+  form.submit();
+}"""
 POLL_INTERVAL_SECONDS = 0.5
 LOCAL_URL_PREFIXES = ("http://127.0.0.1:", "http://localhost:")
 
@@ -76,6 +90,11 @@ def run_steps(scenario: dict[str, Any], out_dir: Path) -> None:
                 page.fill(step["fill"][0], step["fill"][1])
             elif "click" in step:
                 page.click(step["click"])
+                page.wait_for_load_state()
+            elif "post" in step:
+                # Submit a form to a path of the app, as the lecture's first version of
+                # the contact form does (POST /form-entry).
+                page.evaluate(POST_FORM_SCRIPT, [base + step["post"], step["data"]])
                 page.wait_for_load_state()
             elif "screenshot" in step:
                 target = str(out_dir / step["screenshot"])

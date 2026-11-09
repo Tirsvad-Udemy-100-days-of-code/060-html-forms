@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block header %}
+<h1>Clean Blog</h1>
+<p class="subheading">A blog theme for small stories</p>
+{% endblock %}
+{% block content %}
+{% for post in posts %}
+<article class="post-preview">
+  <a href="{{ url_for('show_post', post_id=post.id) }}">
+    <h2 class="post-title">{{ post.title }}</h2>
+    <h3 class="post-subtitle">{{ post.subtitle }}</h3>
+  </a>
+  <p class="post-meta">Posted by {{ post.author }} on {{ post.date }}</p>
+</article>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,21 @@
+{
+  "server": "python -m html_forms.presentation.features.blog.app",
+  "base_url": "http://127.0.0.1:5001",
+  "viewport": [1100, 800],
+  "steps": [
+    {"goto": "/"},
+    {"screenshot": "l5-blog-home.png"},
+    {"goto": "/contact"},
+    {"screenshot": "l5-contact-form.png", "full_page": true},
+    {"post": "/form-entry", "data": {"name": "Angela", "email": "angela@example.com", "phone": "123456789", "message": "Hello from the form"}},
+    {"screenshot": "l6-form-entry-result.png"},
+    {"goto": "/contact"},
+    {"fill": ["input[name=name]", "Angela"]},
+    {"fill": ["input[name=email]", "angela@example.com"]},
+    {"fill": ["input[name=phone]", "123456789"]},
+    {"fill": ["textarea[name=message]", "Hello from the form"]},
+    {"screenshot": "l7-contact-filled.png", "full_page": true},
+    {"click": "form button[type=submit], form input[type=submit]"},
+    {"screenshot": "l8-contact-success.png", "full_page": true}
+  ]
+}
