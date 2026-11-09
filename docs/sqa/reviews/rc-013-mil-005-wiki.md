@@ -9,7 +9,7 @@
 ## Version History
 | Date | Status | Author | Reviewer | Change | Commit |
 | --- | --- | --- | --- | --- | --- |
-| 2026-11-09 | Proposed | Jens Tirsvad Nielsen | AI as stand-in for S01 | Wiki review for MIL-005 | pending |
+| 2026-11-09 | Proposed | Jens Tirsvad Nielsen | AI as stand-in for S01 | Wiki review for MIL-005 | [43b794d] |
 
 ---
 
@@ -59,3 +59,4 @@ Go. Every Mandatory criterion that can be checked before the merge passes. Crite
 [MIL-005]: ../../milestones/
 [QC-WIKI-001]: ../../../framework/qc/artifacts/qc-wiki.md
 [QC-LANG-001]: ../../../framework/qc/artifacts/qc-language-domain.md
+[43b794d]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/060-html-forms/commit/43b794d32d7212acba9444ca3b16fc53d0f0d081
