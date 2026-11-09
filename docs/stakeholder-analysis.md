@@ -11,8 +11,8 @@
 ## Version History
 | Date | Status | Author | Reviewer | Change | Commit |
 | --- | --- | --- | --- | --- | --- |
-| 2026-11-09 | Deprecated | Jens Tirsvad Nielsen | S01 | Initial version | pending |
-| 2026-11-09 | Accepted | Jens Tirsvad Nielsen | AI as stand-in for S01 | Accepted after Go review RC-002 | pending |
+| 2026-11-09 | Deprecated | Jens Tirsvad Nielsen | S01 | Initial version | [56bcbfe] |
+| 2026-11-09 | Accepted | Jens Tirsvad Nielsen | AI as stand-in for S01 | Accepted after Go review RC-002 | [56bcbfe] |
 
 ---
 
@@ -83,3 +83,4 @@ This analysis identifies the people the Day 60 repository is for and what each o
 ---
 
 [BC-001]: ./business-case.md
+[56bcbfe]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/060-html-forms/commit/56bcbfe9e4aee1cccad4f4802df911af9412f9de

@@ -9,7 +9,7 @@
 ## Version History
 | Date | Status | Author | Reviewer | Change | Commit |
 | --- | --- | --- | --- | --- | --- |
-| 2026-11-09 | Proposed | Jens Tirsvad Nielsen | AI as stand-in for S01 | Code review for MIL-001 | pending |
+| 2026-11-09 | Proposed | Jens Tirsvad Nielsen | AI as stand-in for S01 | Code review for MIL-001 | [56bcbfe] |
 
 ---
 
@@ -59,3 +59,4 @@ Go. Every Mandatory criterion passes; ruff, ruff format, mypy --strict and pytes
 
 [MIL-001]: ../../milestones/
 [QC-PY-001]: ../../../framework/qc/code/qc-programming-python.md
+[56bcbfe]: https://git.tirsystem.com/Tirsvad-Udemy-100-days-of-code/060-html-forms/commit/56bcbfe9e4aee1cccad4f4802df911af9412f9de
