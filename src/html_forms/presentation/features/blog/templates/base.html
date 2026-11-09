@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Clean Blog{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/blog.css') }}">
+</head>
+<body>
+  <nav class="nav">
+    <a class="brand" href="{{ url_for('home') }}">Clean Blog</a>
+    <ul>
+      <li><a href="{{ url_for('home') }}">Home</a></li>
+      <li><a href="{{ url_for('about') }}">About</a></li>
+      <li><a href="{{ url_for('contact') }}">Contact</a></li>
+    </ul>
+  </nav>
+  <header class="masthead">
+    <div class="masthead-inner">
+      {% block header %}<h1>Clean Blog</h1>{% endblock %}
+    </div>
+  </header>
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="footer">
+    <p>Copyright &copy; Clean Blog 2026</p>
+  </footer>
+</body>
+</html>

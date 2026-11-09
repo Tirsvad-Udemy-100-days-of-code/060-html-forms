@@ -67,7 +67,15 @@ With the virtual environment active, start the login form demo (lecture steps L1
 python -m html_forms.presentation.features.login.app
 ```
 
-Open <http://127.0.0.1:5000/>. More apps are added here as each milestone lands.
+Open <http://127.0.0.1:5000/>.
+
+Start the blog with its contact form (lecture steps L5 to L8) in a second terminal:
+
+```bash
+python -m html_forms.presentation.features.blog.app
+```
+
+Open <http://127.0.0.1:5001/>. More features are added here as each milestone lands.
 
 ### Lecture steps
 
@@ -80,7 +88,16 @@ Screenshots are captured in a Docker container (`bash tools/screenshot/run.sh de
 | L3 | The form with `action` and `method="post"` filled in, ready to submit | ![L3 filled form][L3] |
 | L4 | `receive_data` returns the name and password as an `<h1>` | ![L4 result][L4] |
 
-The login demo echoes the password because the lecture does; never do that in a real application.
+| L5 | The blog home page and the contact form, which the lecture wires to a route | ![L5 blog home][L5a] ![L5 contact form][L5b] |
+| L6 | `POST /form-entry` receives the form data and returns an `<h1>` | ![L6 form-entry result][L6] |
+| L7 | The contact form filled in; `/contact` now handles GET and POST with `request.method` | ![L7 filled contact form][L7] |
+| L8 | `contact.html` shows "Successfully sent your message" through a Jinja `if` | ![L8 success heading][L8] |
+
+Notes:
+
+- The login demo echoes the password because the lecture does; never do that in a real application.
+- The Day 60 starting files could not be downloaded, so the blog is rebuilt from the lecture description with its own plain CSS (no CDN) and bundled post data.
+- The lecture prints the submitted form data. This project logs only the field names and the message length, so no personal data reaches the logs.
 
 ## 🧪 Tests
 
@@ -143,6 +160,11 @@ The documents a newcomer needs, in reading order.
 [L2]: ./docs/images/l2-login-form.png
 [L3]: ./docs/images/l3-form-post.png
 [L4]: ./docs/images/l4-receive-data.png
+[L5a]: ./docs/images/l5-blog-home.png
+[L5b]: ./docs/images/l5-contact-form.png
+[L6]: ./docs/images/l6-form-entry-result.png
+[L7]: ./docs/images/l7-contact-filled.png
+[L8]: ./docs/images/l8-contact-success.png
 [agents]: ./AGENTS.md
 [BC-001]: ./docs/business-case.md
 [SA-001]: ./docs/stakeholder-analysis.md

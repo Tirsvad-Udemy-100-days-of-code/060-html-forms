@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "title": "Man must explore, and this is exploration at its greatest",
+    "subtitle": "Problems look mighty small from 150 miles up",
+    "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    "author": "Ada Example",
+    "date": "September 24, 2026",
+    "image": null
+  },
+  {
+    "id": 2,
+    "title": "I believe every human has a finite number of heartbeats",
+    "subtitle": "I don't intend to waste any of mine",
+    "body": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\n\nExcepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    "author": "Ben Sample",
+    "date": "September 18, 2026",
+    "image": null
+  },
+  {
+    "id": 3,
+    "title": "Science has not yet mastered prophecy",
+    "subtitle": "We predict too much for the next year and yet far too little for the next ten",
+    "body": "Curabitur pretium tincidunt lacus. Nulla gravida orci a odio, nullam varius, turpis et commodo pharetra.\n\nEst eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida.",
+    "author": "Cleo Placeholder",
+    "date": "August 29, 2026",
+    "image": null
+  }
+]
