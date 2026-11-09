@@ -119,7 +119,6 @@ Screenshots are captured in a Docker container (`bash tools/screenshot/run.sh de
 | L2 | The hand-written login form | ![L2 login form][L2] |
 | L3 | The form with `action` and `method="post"` filled in, ready to submit | ![L3 filled form][L3] |
 | L4 | `receive_data` returns the name and password as an `<h1>` | ![L4 result][L4] |
-
 | L5 | The blog home page and the contact form, which the lecture wires to a route | ![L5 blog home][L5a] ![L5 contact form][L5b] |
 | L6 | `POST /form-entry` receives the form data and returns an `<h1>` | ![L6 form-entry result][L6] |
 | L7 | The contact form filled in; `/contact` now handles GET and POST with `request.method` | ![L7 filled contact form][L7] |
